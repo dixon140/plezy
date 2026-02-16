@@ -188,6 +188,8 @@ jobs:
         run: flutter build macos --release --dart-define=ENABLE_UPDATE_CHECK=true
 
       - name: Import Code Signing Certificate
+        id: import_macos_cert
+        continue-on-error: true
         if: ${{ secrets.MACOS_CERTIFICATE_BASE64 != '' && secrets.MACOS_CERTIFICATE_PASSWORD != '' && secrets.KEYCHAIN_PASSWORD != '' }}
         env:
           MACOS_CERTIFICATE_BASE64: ${{ secrets.MACOS_CERTIFICATE_BASE64 }}
@@ -210,7 +212,7 @@ jobs:
           security list-keychains -d user -s $KEYCHAIN_PATH login.keychain
 
       - name: Sign Application
-        if: ${{ secrets.MACOS_CERTIFICATE_BASE64 != '' && secrets.MACOS_CERTIFICATE_PASSWORD != '' && secrets.KEYCHAIN_PASSWORD != '' && secrets.APPLE_TEAM_ID != '' }}
+        if: ${{ steps.import_macos_cert.outcome == 'success' && secrets.APPLE_TEAM_ID != '' }}
         env:
           APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
         run: |
@@ -231,7 +233,7 @@ jobs:
           codesign --force --sign "$IDENTITY" --timestamp --options runtime --entitlements macos/Runner/Release.entitlements "$APP_PATH"
 
       - name: Verify Signature
-        if: ${{ secrets.MACOS_CERTIFICATE_BASE64 != '' && secrets.MACOS_CERTIFICATE_PASSWORD != '' && secrets.KEYCHAIN_PASSWORD != '' && secrets.APPLE_TEAM_ID != '' }}
+        if: ${{ steps.import_macos_cert.outcome == 'success' && secrets.APPLE_TEAM_ID != '' }}
         run: |
           APP_PATH="build/macos/Build/Products/Release/Plezy.app"
           echo "Verifying signature..."
@@ -239,7 +241,7 @@ jobs:
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 
       - name: Notarize Application
-        if: ${{ secrets.MACOS_CERTIFICATE_BASE64 != '' && secrets.MACOS_CERTIFICATE_PASSWORD != '' && secrets.KEYCHAIN_PASSWORD != '' && secrets.APPLE_TEAM_ID != '' && secrets.APPLE_ID != '' && secrets.APPLE_APP_SPECIFIC_PASSWORD != '' }}
+        if: ${{ steps.import_macos_cert.outcome == 'success' && secrets.APPLE_TEAM_ID != '' && secrets.APPLE_ID != '' && secrets.APPLE_APP_SPECIFIC_PASSWORD != '' }}
         env:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
