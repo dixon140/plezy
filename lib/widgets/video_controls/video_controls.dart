@@ -194,6 +194,9 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
   Timer? _hideTimer;
   bool _isFullscreen = false;
   bool _isAlwaysOnTop = false;
+  bool get _isDesktopFullscreen =>
+      (_isFullscreen || FullscreenStateManager().isFullscreen) &&
+      (Platform.isWindows || Platform.isLinux || Platform.isMacOS);
   late final FocusNode _focusNode;
   KeyboardShortcutsService? _keyboardService;
   int _seekTimeSmall = 10; // Default, loaded from settings
@@ -1285,6 +1288,14 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
     }
   }
 
+  void _handleBackOrExitFullscreen() {
+    if (_isDesktopFullscreen) {
+      _toggleFullscreen();
+      return;
+    }
+    (widget.onBack ?? () => Navigator.of(context).pop(true))();
+  }
+
   /// Initialize always-on-top state from window manager (desktop only)
   Future<void> _initAlwaysOnTopState() async {
     final isOnTop = await windowManager.isAlwaysOnTop();
@@ -1417,7 +1428,7 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
         _nextSubtitleTrack,
         _nextChapter,
         _previousChapter,
-        onBack: widget.onBack ?? () => Navigator.of(context).pop(true),
+        onBack: _handleBackOrExitFullscreen,
         onToggleShader: _toggleShader,
       );
       if (result == KeyEventResult.handled) {
@@ -1528,8 +1539,8 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
                 Navigator.of(context).maybePop();
                 return;
               }
-              // On Windows/Linux with navigation off, ESC first exits fullscreen
-              if (!_videoPlayerNavigationEnabled && _isFullscreen && (Platform.isWindows || Platform.isLinux)) {
+              // On desktop, ESC should leave fullscreen before leaving playback.
+              if (_isDesktopFullscreen) {
                 _toggleFullscreen();
                 return;
               }
@@ -1639,7 +1650,7 @@ class _PlexVideoControlsState extends State<PlexVideoControls> with WindowListen
               _nextSubtitleTrack,
               _nextChapter,
               _previousChapter,
-              onBack: widget.onBack ?? () => Navigator.of(context).pop(true),
+              onBack: _handleBackOrExitFullscreen,
               onToggleShader: _toggleShader,
               onSkipMarker: _performAutoSkip,
             );

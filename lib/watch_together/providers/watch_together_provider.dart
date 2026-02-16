@@ -273,6 +273,9 @@ class WatchTogetherProvider with ChangeNotifier {
     _peerDisconnectedSubscription = _peerService!.onPeerDisconnected.listen((peerId) {
       appLogger.d('WatchTogether: Peer disconnected: $peerId');
 
+      // Keep sync readiness state accurate when peers drop unexpectedly.
+      _syncManager?.onPeerDisconnected(peerId);
+
       // Capture display name before removal for notification
       final disconnectedName = _participants.where((p) => p.peerId == peerId).map((p) => p.displayName).firstOrNull;
 

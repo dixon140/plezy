@@ -121,6 +121,27 @@ class WatchTogetherSyncManager {
     appLogger.d('WatchTogether: Player attached, isHost: ${_session.isHost}');
   }
 
+  /// Handle a relay-level peer disconnect.
+  ///
+  /// This keeps readiness tracking in sync when a peer drops without sending
+  /// an explicit leave message.
+  void onPeerDisconnected(String peerId) {
+    final removed = _peerReady.remove(peerId);
+    if (removed != null) {
+      appLogger.d('WatchTogether: Removed disconnected peer from readiness map: $peerId');
+    }
+
+    // Host-only recovery: if initial play was deferred waiting for peers and the
+    // disconnected peer was the blocker, resume now that all remaining peers are ready.
+    if (_session.isHost && _deferredPlay && isAllReady) {
+      final pendingPosition = _deferredPlayPosition;
+      _deferredPlay = false;
+      _deferredPlayPosition = null;
+      _firstPlayCompleted = true;
+      _applyRemotePlay(position: pendingPosition);
+    }
+  }
+
   /// Initialize participant tracking from existing session participants
   /// Call this before attachPlayer() to ensure we know about participants who joined before
   void initializeParticipants(List<String> peerIds) {
