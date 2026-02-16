@@ -74,10 +74,11 @@ class SettingsService extends BaseSharedPreferencesService {
   static const String _keyUseExternalPlayer = 'use_external_player';
   static const String _keySelectedExternalPlayer = 'selected_external_player';
   static const String _keyCustomExternalPlayers = 'custom_external_players';
+  static const String _keyConfirmExitOnBack = 'confirm_exit_on_back';
 
   SettingsService._();
 
-  static Future<SettingsService> getInstance() async {
+  static Future<SettingsService> getInstance() {
     return BaseSharedPreferencesService.initializeInstance(() => SettingsService._());
   }
 
@@ -816,7 +817,7 @@ class SettingsService extends BaseSharedPreferencesService {
     final localeString = prefs.getString(_keyAppLocale);
     if (localeString == null) return AppLocaleUtils.findDeviceLocale();
 
-    return AppLocale.values.firstWhere((locale) => locale.languageCode == localeString, orElse: () => AppLocale.en);
+    return AppLocale.values.asNameMap()[localeString] ?? AppLocale.en;
   }
 
   // Track Selection Settings
@@ -1107,6 +1108,15 @@ class SettingsService extends BaseSharedPreferencesService {
     }
   }
 
+  // Confirm Exit on Back (Android TV)
+  Future<void> setConfirmExitOnBack(bool value) async {
+    await prefs.setBool(_keyConfirmExitOnBack, value);
+  }
+
+  bool getConfirmExitOnBack() {
+    return prefs.getBool(_keyConfirmExitOnBack) ?? true; // Default: enabled
+  }
+
   // Reset all settings to defaults
   Future<void> resetAllSettings() async {
     await Future.wait([
@@ -1160,6 +1170,7 @@ class SettingsService extends BaseSharedPreferencesService {
       prefs.remove(_keyUseExternalPlayer),
       prefs.remove(_keySelectedExternalPlayer),
       prefs.remove(_keyCustomExternalPlayers),
+      prefs.remove(_keyConfirmExitOnBack),
     ]);
   }
 

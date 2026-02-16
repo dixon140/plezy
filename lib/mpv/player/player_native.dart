@@ -88,15 +88,14 @@ class PlayerNative extends PlayerBase {
   /// Returns null if the call fails.
   Future<int?> _openContentFd(String contentUri) async {
     try {
-      final fd = await methodChannel.invokeMethod<int>('openContentFd', {'uri': contentUri});
-      return fd;
+      return await methodChannel.invokeMethod<int>('openContentFd', {'uri': contentUri});
     } catch (e) {
       return null;
     }
   }
 
   @override
-  Future<void> open(Media media, {bool play = true}) async {
+  Future<void> open(Media media, {bool play = true, bool isLive = false}) async {
     checkDisposed();
     await _ensureInitialized();
 

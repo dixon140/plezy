@@ -65,6 +65,7 @@ class TranslationsSv with BaseTranslations<AppLocale, Translations> implements T
 	@override late final _TranslationsLogsSv logs = _TranslationsLogsSv._(_root);
 	@override late final _TranslationsLicensesSv licenses = _TranslationsLicensesSv._(_root);
 	@override late final _TranslationsNavigationSv navigation = _TranslationsNavigationSv._(_root);
+	@override late final _TranslationsLiveTvSv liveTv = _TranslationsLiveTvSv._(_root);
 	@override late final _TranslationsDownloadsSv downloads = _TranslationsDownloadsSv._(_root);
 	@override late final _TranslationsPlaylistsSv playlists = _TranslationsPlaylistsSv._(_root);
 	@override late final _TranslationsCollectionsSv collections = _TranslationsCollectionsSv._(_root);
@@ -143,6 +144,11 @@ class _TranslationsCommonSv implements TranslationsCommonEn {
 	@override String get mute => 'Ljud av';
 	@override String get ok => 'OK';
 	@override String get loading => 'Laddar...';
+	@override String get reconnect => 'Återanslut';
+	@override String get exitConfirmTitle => 'Avsluta appen?';
+	@override String get exitConfirmMessage => 'Är du säker på att du vill avsluta?';
+	@override String get dontAskAgain => 'Fråga inte igen';
+	@override String get exit => 'Avsluta';
 }
 
 // Path: screens
@@ -303,6 +309,8 @@ class _TranslationsSettingsSv implements TranslationsSettingsEn {
 	@override String get matchContentFrameRateDescription => 'Justera skärmens uppdateringsfrekvens för att matcha videoinnehållet, minskar hackighet och sparar batteri';
 	@override String get requireProfileSelectionOnOpen => 'Fråga efter profil vid appstart';
 	@override String get requireProfileSelectionOnOpenDescription => 'Visa profilval varje gång appen öppnas';
+	@override String get confirmExitOnBack => 'Bekräfta innan avslut';
+	@override String get confirmExitOnBackDescription => 'Visa en bekräftelsedialog när du trycker tillbaka för att avsluta appen';
 }
 
 // Path: search
@@ -419,6 +427,7 @@ class _TranslationsTooltipsSv implements TranslationsTooltipsEn {
 
 	// Translations
 	@override String get shufflePlay => 'Blanda uppspelning';
+	@override String get playTrailer => 'Spela trailer';
 	@override String get markAsWatched => 'Markera som sedd';
 	@override String get markAsUnwatched => 'Markera som osedd';
 }
@@ -608,6 +617,7 @@ class _TranslationsDiscoverSv implements TranslationsDiscoverEn {
 	@override String playEpisode({required Object season, required Object episode}) => 'S${season}E${episode}';
 	@override String get overview => 'Översikt';
 	@override String get cast => 'Rollbesättning';
+	@override String get extras => 'Trailers och Extra';
 	@override String get seasons => 'Säsonger';
 	@override String get studio => 'Studio';
 	@override String get rating => 'Åldersgräns';
@@ -761,6 +771,53 @@ class _TranslationsNavigationSv implements TranslationsNavigationEn {
 	// Translations
 	@override String get libraries => 'Bibliotek';
 	@override String get downloads => 'Nedladdningar';
+	@override String get liveTv => 'Live-TV';
+}
+
+// Path: liveTv
+class _TranslationsLiveTvSv implements TranslationsLiveTvEn {
+	_TranslationsLiveTvSv._(this._root);
+
+	final TranslationsSv _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Live-TV';
+	@override String get channels => 'Kanaler';
+	@override String get guide => 'Programguide';
+	@override String get recordings => 'Inspelningar';
+	@override String get subscriptions => 'Inspelningsregler';
+	@override String get scheduled => 'Schemalagda';
+	@override String get noChannels => 'Inga kanaler tillgängliga';
+	@override String get noDvr => 'Ingen DVR konfigurerad på någon server';
+	@override String get tuneFailed => 'Kunde inte ställa in kanalen';
+	@override String get loading => 'Laddar kanaler...';
+	@override String get nowPlaying => 'Spelas nu';
+	@override String get record => 'Spela in';
+	@override String get recordSeries => 'Spela in serie';
+	@override String get cancelRecording => 'Avbryt inspelning';
+	@override String get deleteSubscription => 'Ta bort inspelningsregel';
+	@override String get deleteSubscriptionConfirm => 'Är du säker på att du vill ta bort denna inspelningsregel?';
+	@override String get subscriptionDeleted => 'Inspelningsregel borttagen';
+	@override String get noPrograms => 'Ingen programdata tillgänglig';
+	@override String get noRecordings => 'Inga inspelningar schemalagda';
+	@override String get noSubscriptions => 'Inga inspelningsregler';
+	@override String channelNumber({required Object number}) => 'Kanal ${number}';
+	@override String get live => 'LIVE';
+	@override String get hd => 'HD';
+	@override String get premiere => 'NY';
+	@override String get reloadGuide => 'Ladda om programguide';
+	@override String get guideReloaded => 'Programdata omladdad';
+	@override String get allChannels => 'Alla kanaler';
+	@override String get now => 'Nu';
+	@override String get today => 'Idag';
+	@override String get midnight => 'Midnatt';
+	@override String get overnight => 'Natt';
+	@override String get morning => 'Morgon';
+	@override String get daytime => 'Dagtid';
+	@override String get evening => 'Kväll';
+	@override String get lateNight => 'Sen kväll';
+	@override String get whatsOn => 'På TV nu';
+	@override String get watchChannel => 'Titta på kanal';
 }
 
 // Path: downloads
@@ -1211,6 +1268,11 @@ extension on TranslationsSv {
 			'common.mute' => 'Ljud av',
 			'common.ok' => 'OK',
 			'common.loading' => 'Laddar...',
+			'common.reconnect' => 'Återanslut',
+			'common.exitConfirmTitle' => 'Avsluta appen?',
+			'common.exitConfirmMessage' => 'Är du säker på att du vill avsluta?',
+			'common.dontAskAgain' => 'Fråga inte igen',
+			'common.exit' => 'Avsluta',
 			'screens.licenses' => 'Licenser',
 			'screens.switchProfile' => 'Byt profil',
 			'screens.subtitleStyling' => 'Undertext-styling',
@@ -1344,6 +1406,8 @@ extension on TranslationsSv {
 			'settings.matchContentFrameRateDescription' => 'Justera skärmens uppdateringsfrekvens för att matcha videoinnehållet, minskar hackighet och sparar batteri',
 			'settings.requireProfileSelectionOnOpen' => 'Fråga efter profil vid appstart',
 			'settings.requireProfileSelectionOnOpenDescription' => 'Visa profilval varje gång appen öppnas',
+			'settings.confirmExitOnBack' => 'Bekräfta innan avslut',
+			'settings.confirmExitOnBackDescription' => 'Visa en bekräftelsedialog när du trycker tillbaka för att avsluta appen',
 			'search.hint' => 'Sök filmer, serier, musik...',
 			'search.tryDifferentTerm' => 'Prova en annan sökterm',
 			'search.searchYourMedia' => 'Sök i dina media',
@@ -1415,6 +1479,7 @@ extension on TranslationsSv {
 			'accessibility.mediaCardUnwatched' => 'osedd',
 			'accessibility.tapToPlay' => 'Tryck för att spela',
 			'tooltips.shufflePlay' => 'Blanda uppspelning',
+			'tooltips.playTrailer' => 'Spela trailer',
 			'tooltips.markAsWatched' => 'Markera som sedd',
 			'tooltips.markAsUnwatched' => 'Markera som osedd',
 			'videoControls.audioLabel' => 'Ljud',
@@ -1545,6 +1610,7 @@ extension on TranslationsSv {
 			'discover.playEpisode' => ({required Object season, required Object episode}) => 'S${season}E${episode}',
 			'discover.overview' => 'Översikt',
 			'discover.cast' => 'Rollbesättning',
+			'discover.extras' => 'Trailers och Extra',
 			'discover.seasons' => 'Säsonger',
 			'discover.studio' => 'Studio',
 			'discover.rating' => 'Åldersgräns',
@@ -1634,6 +1700,46 @@ extension on TranslationsSv {
 			'licenses.licensesCount' => ({required Object count}) => '${count} licenser',
 			'navigation.libraries' => 'Bibliotek',
 			'navigation.downloads' => 'Nedladdningar',
+			'navigation.liveTv' => 'Live-TV',
+			'liveTv.title' => 'Live-TV',
+			'liveTv.channels' => 'Kanaler',
+			'liveTv.guide' => 'Programguide',
+			'liveTv.recordings' => 'Inspelningar',
+			'liveTv.subscriptions' => 'Inspelningsregler',
+			'liveTv.scheduled' => 'Schemalagda',
+			'liveTv.noChannels' => 'Inga kanaler tillgängliga',
+			'liveTv.noDvr' => 'Ingen DVR konfigurerad på någon server',
+			'liveTv.tuneFailed' => 'Kunde inte ställa in kanalen',
+			'liveTv.loading' => 'Laddar kanaler...',
+			'liveTv.nowPlaying' => 'Spelas nu',
+			'liveTv.record' => 'Spela in',
+			'liveTv.recordSeries' => 'Spela in serie',
+			'liveTv.cancelRecording' => 'Avbryt inspelning',
+			'liveTv.deleteSubscription' => 'Ta bort inspelningsregel',
+			'liveTv.deleteSubscriptionConfirm' => 'Är du säker på att du vill ta bort denna inspelningsregel?',
+			'liveTv.subscriptionDeleted' => 'Inspelningsregel borttagen',
+			'liveTv.noPrograms' => 'Ingen programdata tillgänglig',
+			'liveTv.noRecordings' => 'Inga inspelningar schemalagda',
+			'liveTv.noSubscriptions' => 'Inga inspelningsregler',
+			'liveTv.channelNumber' => ({required Object number}) => 'Kanal ${number}',
+			'liveTv.live' => 'LIVE',
+			'liveTv.hd' => 'HD',
+			'liveTv.premiere' => 'NY',
+			'liveTv.reloadGuide' => 'Ladda om programguide',
+			'liveTv.guideReloaded' => 'Programdata omladdad',
+			'liveTv.allChannels' => 'Alla kanaler',
+			'liveTv.now' => 'Nu',
+			'liveTv.today' => 'Idag',
+			'liveTv.midnight' => 'Midnatt',
+			'liveTv.overnight' => 'Natt',
+			'liveTv.morning' => 'Morgon',
+			'liveTv.daytime' => 'Dagtid',
+			'liveTv.evening' => 'Kväll',
+			'liveTv.lateNight' => 'Sen kväll',
+			'liveTv.whatsOn' => 'På TV nu',
+			_ => null,
+		} ?? switch (path) {
+			'liveTv.watchChannel' => 'Titta på kanal',
 			'downloads.title' => 'Nedladdningar',
 			'downloads.manage' => 'Hantera',
 			'downloads.tvShows' => 'TV-serier',
@@ -1680,8 +1786,6 @@ extension on TranslationsSv {
 			'playlists.playlist' => 'Spellista',
 			'collections.title' => 'Samlingar',
 			'collections.collection' => 'Samling',
-			_ => null,
-		} ?? switch (path) {
 			'collections.empty' => 'Samlingen är tom',
 			'collections.unknownLibrarySection' => 'Kan inte ta bort: okänd bibliotekssektion',
 			'collections.deleteCollection' => 'Ta bort samling',
